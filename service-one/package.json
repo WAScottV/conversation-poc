@@ -12,5 +12,8 @@
   "dependencies": {
     "dotenv": "^6.0.0",
     "microservice-kit": "file:../../microservice-kit"
+  },
+  "devDependencies": {
+    "loadtest": "*"
   }
 }
