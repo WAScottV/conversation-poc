@@ -1,0 +1,24 @@
+{
+  "name": "conversation-poc",
+  "version": "1.0.0",
+  "description": "1. npm i microservice-kit. 2. npm i dotenv 3. Create appropriate up.json files and configure them. 4. Call function...",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd ./service-one && up start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WAScottV/conversation-poc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WAScottV/conversation-poc/issues"
+  },
+  "homepage": "https://github.com/WAScottV/conversation-poc#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
