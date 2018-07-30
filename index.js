@@ -2,35 +2,45 @@ const readline = require('readline');
 const axios = require('axios');
 const dataObj = require('./testing/post')();
 
+const rootService = 'http://localhost:3000';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-rl.question('How can I help you today?', async answer => {
-    dataObj.classifier.topclass = answer;
-    let x = await callNext('http://localhost:3000', dataObj);
-    console.log(x);
-    // axios.post('http://localhost:3000', dataObj)
-    //   .then(function (response) {
-    //     console.log(JSON.stringify(response.data.response.machine, undefined, 2));
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    rl.close();
-});
+let prompt = 'Start conversation here:';
+
+// Flow control variables.
+let nextUrl = rootService;
+let exit = false;
 
 const callNext = async (url, data) => {
     if (url === undefined || url === null) return;
     const response = await axios.post(url, data);
-    return parseResponse(response);
+    parseResponse(response);
 };
 
+// for now, use the 'machine' property on object to determine
+// url of next service.
 const parseResponse = (body) => {
-    return {
-        text: body.data.response.reply,
-        next: body.data.response.machine
-    }
+    prompt = body.data.response.reply.pop()['msg'];
+    nextUrl = body.data.response.machine;
 };
+
+const main = () => {
+    rl.question(JSON.stringify(prompt, undefined, 2) + '\n\n', async answer => {
+        dataObj.classifier.topclass = answer;
+        await callNext(nextUrl, dataObj);
+        if (nextUrl === undefined || nextUrl === null) {
+            rl.close();
+            console.log(prompt);
+            return;
+        }
+        main();
+    });
+};
+
+main();
